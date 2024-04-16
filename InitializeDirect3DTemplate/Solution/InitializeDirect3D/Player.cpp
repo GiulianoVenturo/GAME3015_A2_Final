@@ -77,28 +77,22 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 		commands.push(moveDown);
 	}
 
-	if (GetAsyncKeyState(Input::S) & 0x8000)
+	if (GetAsyncKeyState(Input::Q) & 0x8000)
 	{
-		Command moveDown;
-		moveDown.category = Category::PlayerAircraft;
-		moveDown.action = derivedAction<Aircraft>(AircraftMover(0.f, 0.f, -PlayerSpeed));
-		commands.push(moveDown);
+		Command goUpwards;
+		goUpwards.category = Category::PlayerAircraft;
+		goUpwards.action = derivedAction<Aircraft>(AircraftMover(0.f, PlayerSpeed, 0.f));
+		commands.push(goUpwards);
 	}
 
+	if (GetAsyncKeyState(Input::E) & 0x8000)
+	{
+		Command goDownwards;
+		goDownwards.category = Category::PlayerAircraft;
+		goDownwards.action = derivedAction<Aircraft>(AircraftMover(0.f, -PlayerSpeed, 0.f));
+		commands.push(goDownwards);
+	}
 
-	//const float dt = gt.DeltaTime();
-
-	//if(GetAsyncKeyState('W') & 0x8000)
-	//	mCamera.Walk(10.0f*dt);
-
-	//if(GetAsyncKeyState('S') & 0x8000)
-	//	mCamera.Walk(-10.0f*dt);
-
-	//if(GetAsyncKeyState('A') & 0x8000)
-	//	mCamera.Strafe(-10.0f*dt);
-
-	//if(GetAsyncKeyState('D') & 0x8000)
-	//	mCamera.Strafe(10.0f*dt);
 }
 void Player::initializeActions()
 {

@@ -65,9 +65,9 @@ void TitleState::buildScene()
 
 	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::TitleScreen, mGame));
 	mBackground = backgroundSprite.get();
-	mBackground->setPosition(0.0, 7.0, -6.1);
+	mBackground->setPosition(0.0, 5.0, -6.1);
 	mBackground->setWorldRotation(3.14/10, 0, 0);
-	mBackground->setScale(10.0, 5.8, 5.0);
+	mBackground->setScale(15.f, 8.f, 5.f);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
 
@@ -76,7 +76,6 @@ void TitleState::buildScene()
 }
 void TitleState::SetScene()
 {
-	//mBackground->setScale(7.0, 5.8, 5.0);
 
 }
 void TitleState::HideScene()

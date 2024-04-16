@@ -64,8 +64,8 @@ bool Game::Initialize()
     // Reset the command list to prep for initialization commands.
     ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-	mCamera.SetPosition(0.0f, 10.0f, -15.0f);
-    mCamera.Pitch(3.14 / 10);
+	mCamera.SetPosition(0.0f, 12.0f, -20.0f);
+    mCamera.Pitch(3.14 / 7);
  
     mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(),
         2048, 2048);

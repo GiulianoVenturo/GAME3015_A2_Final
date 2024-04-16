@@ -60,7 +60,7 @@ void MenuState::buildScene()
 {
 	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::MainMenu, mGame));
 	mBackground = backgroundSprite.get();
-	mBackground->setPosition(0.0, 7.0, -6.1);//(0.0, 20.0, 0.0);// (0.0, 7.0, -3.0)
+	mBackground->setPosition(0.0, 7.0, -6.1);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 	mBackground->setScale(0.0, 0.0, 0.0);
 
