@@ -36,7 +36,6 @@ bool PauseState::handleEvent(WPARAM btnStat)
 		if (btnStat == Input::P)
 		{
 			SetIsActive(false);
-			//requestChangeState(States::Game);
 			requestChangeState(States::Game, true);
 
 			mBackground->setScale(0.0, 0, 0);
@@ -48,9 +47,6 @@ bool PauseState::handleEvent(WPARAM btnStat)
 			mBackground->setScale(0.0, 0, 0);
 			requestChangeState(States::Game);
 			requestChangeState(States::Menu);
-
-
-
 		}
 	}
 
@@ -61,26 +57,14 @@ bool PauseState::handleEvent(WPARAM btnStat)
 
 void PauseState::buildScene()
 {
+	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::PauseScreen, mGame));
+	mBackground = backgroundSprite.get();
+	mBackground->setPosition(0.0, 8.5, -12.5);
+	mBackground->setScale(0.0, 0, 0);
 	
-		std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::PauseScreen, mGame));
-		mBackground = backgroundSprite.get();
-		mBackground->setPosition(0.0, 7.0, -6.1);// (0.0, 7.0, -3.0)
-		mBackground->setScale(0.0, 0, 0);
-
-		mBackground->setWorldRotation(3.14 / 10, 0, 0);
-		mSceneGraph->attachChild(std::move(backgroundSprite));
-
-
-		//std::unique_ptr<Skybox> skyboxSprite2(new Skybox(mGame));
-		//mSkybox2 = skyboxSprite2.get();
-		//mSkybox2->setPosition(0, 0, 0);
-		//mSkybox2->setScale(5000.0, 5000.0, 5000.0);
-		//mSceneGraph->attachChild(std::move(skyboxSprite2));
-
-
-		mSceneGraph->build();
-	
-
+	mBackground->setWorldRotation(3.14 / 10, 0, 0);
+	mSceneGraph->attachChild(std::move(backgroundSprite));
+	mSceneGraph->build();
 }
 
 void PauseState::SetScene()
@@ -89,6 +73,4 @@ void PauseState::SetScene()
 }
 void PauseState::HideScene()
 {
-	//mBackground->setScale(0.0, 0.0, 0.0);
-
 }

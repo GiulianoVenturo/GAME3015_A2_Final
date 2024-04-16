@@ -637,7 +637,7 @@ void Game::LoadTextures()
         L"../../Textures/bricks2_nmap.dds",
         L"../../Textures/tile.dds",
         L"../../Textures/tile_nmap.dds",
-         L"../../Textures/Desert.dds", 
+         L"../../Textures/ice.dds", 
         L"../../Textures/DesertNMap.dds", 
         L"../../Textures/Eagle.dds", 
         L"../../Textures/EagleNMap.dds", 
@@ -645,15 +645,14 @@ void Game::LoadTextures()
         L"../../Textures/RaptorNor.dds", 
         L"../../Textures/bricks.dds", 
         L"../../Textures/PressAnyKeyNMap.dds", 
-        L"../../Textures/MenuScreenV2.dds", 
+        L"../../Textures/bricks.dds", 
         L"../../Textures/MenuScreenV2NMap.dds", 
-        L"../../Textures/PauseScreen.dds", 
-        L"../../Textures/PauseScreenNMap.dds", 
+        L"../../Textures/WoodCrate01.dds", 
+        L"../../Textures/WoodCrate01.dds", 
         L"../../Textures/white1x1.dds",
         L"../../Textures/default_nmap.dds",
         L"../../Textures/desertcube1024.dds" 
        
-
     };
 	
 	for(int i = 0; i < (int)texNames.size(); ++i)
