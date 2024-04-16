@@ -1,8 +1,4 @@
-#pragma region step 5
 #include "StateStack.h" 
-
-#include <cassert>
-
 
 StateStack::StateStack(State::Context context)
 	: mStack()
@@ -12,62 +8,43 @@ StateStack::StateStack(State::Context context)
 {
 }
 
-
-
 void StateStack::update(const GameTimer& gt)
 {
-	// Iterate from top to bottom, stop as soon as update() returns false
 	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
 	{
 		if (!(*itr)->update(gt))
 			break;
 	}
-
 	applyPendingChanges();
 }
 
 void StateStack::draw()
 {
-	// Draw all active states from bottom to top
 	for (State::Ptr& state : mStack)
 		state->draw();
-	
 }
-void StateStack::buildScene() // add it
+void StateStack::buildScene()
 {
-	//  active buildscene in states from bottom to top
-	applyPendingChanges(); // wtf
-
+	applyPendingChanges();
 	for (State::Ptr& state : mStack)
 		state->buildScene();
 }
 
-void StateStack::buildScene(States::ID ID) // add it
+void StateStack::buildScene(States::ID ID)
 {
-	//  active buildscene in states from bottom to top
-	applyPendingChanges(); // wtf
+	applyPendingChanges();
 
 	for (State::Ptr& state : mStack)
-	{
 		state->buildScene();
-
-		if (state->getStateID() == ID)
-		{
-		}
-	}
 }
 
 void StateStack::handleEvent(WPARAM btnStat)
 {
 	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
-	{
 		if (!(*itr)->handleEvent(btnStat))
 			break;
-	}
 
-	
 	applyPendingChanges();
-
 }
 
 void StateStack::pushState(States::ID stateID)
@@ -78,10 +55,7 @@ void StateStack::pushState(States::ID stateID)
 
 void StateStack::popState()
 {
-	//applyPendingChanges();
 	mPendingList.push_back(PendingChange(Pop));
-	//applyPendingChanges();
-
 }
 
 void StateStack::clearStates()
@@ -91,26 +65,8 @@ void StateStack::clearStates()
 
 void StateStack::RemoveState(States::ID stateID)
 {
-
 	mPendingList.push_back(PendingChange(Remove, stateID));
-	//applyPendingChanges();
 }
-
-//void StateStack::changeStateCondition(States::ID stateID)/// test for states
-//{
-//	State::Ptr stateFound = createState(stateID);
-//
-//	for (State::Ptr& state : mStack)
-//	{
-//		if (typeid(*state) == typeid(*stateFound))
-//		{
-//			state->SetIsActive(!state->GetIsActive());
-//			state->SetScene();
-//
-//			
-//		}
-//	}
-//}
 
 void StateStack::changeStateCondition(States::ID stateID, bool OnlyScene)/// test for states
 {
@@ -121,30 +77,20 @@ void StateStack::changeStateCondition(States::ID stateID, bool OnlyScene)/// tes
 		if (typeid(*state) == typeid(*stateFound))
 		{
 			if (OnlyScene)
-			{
 				state->SetScene();
-			}
 			else
 			{
 				state->SetIsActive(!state->GetIsActive());
 				if (state->GetIsActive())
-				{
 					state->SetScene();
-
-				}
 				else
-				{
 					state->HideScene();
-				}
 
 			}
 
 		}
 	}
 }
-
-
-
 
 bool StateStack::isEmpty() const
 {
@@ -190,13 +136,9 @@ void StateStack::applyPendingChanges()
 					mStack.erase(itr, mStack.end());
 				}
 			}
-
-			//auto itr = std::remove(mStack.begin(), mStack.end(), createState(change.stateID));
-			//mStack.erase(itr, mStack.end());
 			break;
 		}
 	}
-
 	mPendingList.clear();
 }
 

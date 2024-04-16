@@ -8,26 +8,18 @@ TitleState::TitleState(StateStack& stack, Context context)
 	, mSceneGraph(new SceneNode(context.mGame))
 	, mGame(context.mGame)
 {
-	
 	SetIsActive(true);
 }
 
 void TitleState::draw()
 {
 	if (GetIsActive() == true)
-	{
 		mSceneGraph->draw();
-	}
 }
 
 bool TitleState::update(const GameTimer& gt)
 {
-
-	if (GetIsActive() == true)
-	{
-	}
 	mSceneGraph->update(gt);
-
 	return true;
 }
 
@@ -35,34 +27,16 @@ bool TitleState::handleEvent(WPARAM btnStat)
 {
 	if (btnStat != 0 && GetIsActive() == true)
 	{
-		//requestStackPush(States::Game);
-		//requestStackPop();
-		//requestStackPush(States::Menu);
-		/*requestStackPop();
-		requestStackPush(States::Menu);*/
-
-		//requestStackPop();
-
-	/*	requestStackPop();
-		requestStackPush(States::Pause);*/
 		requestChangeState(States::Menu);
 		SetIsActive(false);
-		//requestStackPop();
-		//requestStateRemoval(getStateID());
-
 		original = mBackground->getWorldScale();
 		mBackground->setScale(0, 0, 0);
-		//ChangeScene(States::Pause);
-		//ChangeScene(States::Pause);
-
 	}
 	return true;
 }
 
-
 void TitleState::buildScene()
 {
-
 	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::TitleScreen, mGame));
 	mBackground = backgroundSprite.get();
 	mBackground->setPosition(0.0, 5.0, -6.1);
@@ -70,16 +44,12 @@ void TitleState::buildScene()
 	mBackground->setScale(15.f, 8.f, 5.f);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
-
 	mSceneGraph->build();
-	
 }
 void TitleState::SetScene()
 {
-
 }
 void TitleState::HideScene()
 {
-
 }
 #pragma endregion

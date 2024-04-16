@@ -46,29 +46,17 @@ void State::ChangeScene(States::ID stateID)
 {
 	requestStackPop();
 	requestStackPush(stateID);
-	//mStack->buildScene(stateID);
-	//mStack->draw();
-
 }
 
 
-bool State::GetIsActive()/// test for states
+bool State::GetIsActive()
 {
 	return mIsActive;
 }
 
-void State::SetIsActive(bool isActive)/// test for states
+void State::SetIsActive(bool isActive)
 {
 	mIsActive = isActive;
-
-	//if (isActive)
-	//{
-	//	SetScene();
-	//}
-	//else
-	//{
-	//	HideScene();
-	//}
 }
 
 
@@ -81,7 +69,7 @@ void State::HideScene()
 
 }
 
-void State::requestChangeState(States::ID stateID, bool isOnlyScene)/// test for states
+void State::requestChangeState(States::ID stateID, bool isOnlyScene)
 {
 	mStack->changeStateCondition(stateID, isOnlyScene);
 }

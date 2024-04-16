@@ -43,9 +43,7 @@ void SceneNode::updateCurrent(const GameTimer& gt)
 void SceneNode::updateChildren(const GameTimer& gt)
 {
 	for (Ptr& child : mChildren)
-	{
 		child->update(gt);
-	}
 }
 
 void SceneNode::draw() const
@@ -62,9 +60,7 @@ void SceneNode::drawCurrent() const
 void SceneNode::drawChildren() const
 {
 	for (const Ptr& child : mChildren)
-	{
 		child->draw();
-	}
 }
 
 void SceneNode::build()
@@ -81,9 +77,7 @@ void SceneNode::buildCurrent()
 void SceneNode::buildChildren()
 {
 	for (const Ptr& child : mChildren)
-	{
 		child->build();
-	}
 }
 
 XMFLOAT3 SceneNode::getWorldPosition() const
@@ -128,7 +122,6 @@ XMFLOAT4X4 SceneNode::getWorldTransform() const
 		T = Tp * T;
 	}
 	XMStoreFloat4x4(&transform, T);
-
 	return transform;
 }
 
@@ -136,10 +129,10 @@ XMFLOAT4X4 SceneNode::getTransform() const
 {
 	XMFLOAT4X4 transform;
 	XMStoreFloat4x4(&transform, XMMatrixScaling(mWorldScaling.x, mWorldScaling.y, mWorldScaling.z) *
-		XMMatrixRotationX(mWorldRotation.x) *
-		XMMatrixRotationY(mWorldRotation.y) *
-		XMMatrixRotationZ(mWorldRotation.z) *
-		XMMatrixTranslation(mWorldPosition.x, mWorldPosition.y, mWorldPosition.z));
+										XMMatrixRotationX(mWorldRotation.x) *
+										XMMatrixRotationY(mWorldRotation.y) *
+										XMMatrixRotationZ(mWorldRotation.z) *
+										XMMatrixTranslation(mWorldPosition.x, mWorldPosition.y, mWorldPosition.z));
 	return transform;
 }
 

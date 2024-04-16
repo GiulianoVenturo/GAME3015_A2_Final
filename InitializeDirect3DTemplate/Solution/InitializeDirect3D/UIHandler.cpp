@@ -15,6 +15,7 @@ UIHandler::UIHandler(UIHandlerType type, Game* game) : Entity(game), mType(type)
 		break;
 	}
 }
+
 void UIHandler::drawCurrent()const
 {
 	game->GetmCommandList()->SetPipelineState(game->GetPSOs()["opaque"].Get());
@@ -24,7 +25,6 @@ void UIHandler::drawCurrent()const
 
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 	auto objectCB = game->GetmCurrFrameResource()->ObjectCB->Resource();
-
 
 	game->GetmCommandList()->IASetVertexBuffers(0, 1, &vbv);
 	game->GetmCommandList()->IASetIndexBuffer(&ibv);
