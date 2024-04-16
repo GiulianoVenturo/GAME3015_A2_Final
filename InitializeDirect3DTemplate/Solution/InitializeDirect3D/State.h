@@ -33,12 +33,12 @@ public:
 	virtual void		buildScene() = 0; // add it
 	virtual States::ID  getStateID() = 0;
 	bool				GetIsActive();/// test for states
-	void				SetIsActive(bool isActive);//!!!!
+	void				SetIsActive(bool isActive);
 
 	virtual void		SetScene() = 0;
 	virtual void		HideScene() = 0;
 	/// test for states
-	void				requestChangeState(States::ID stateID, bool isOnlyScene =false);///!!! test for states
+	void				requestChangeState(States::ID stateID, bool isOnlyScene =false);/// test for states
 
 protected:
 	void				requestStackPush(States::ID stateID);
@@ -51,9 +51,16 @@ protected:
 	XMFLOAT3			original;
 
 
+
+	// world
 private:
 	StateStack*         mStack;
 	Context				mContext;
 	bool				mIsActive = false;/// test for states
 };
+
+
+
+
+//#pragma endregion
 

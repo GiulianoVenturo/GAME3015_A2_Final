@@ -135,6 +135,7 @@
     <ClCompile Include="..\..\Common\GeometryGenerator.cpp" />
     <ClCompile Include="..\..\Common\MathHelper.cpp" />
     <ClCompile Include="Aircraft.cpp" />
+    <ClCompile Include="AircraftShadow.cpp" />
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="..\..\Common\MathHelper.h" />
     <ClInclude Include="..\..\Common\UploadBuffer.h" />
     <ClInclude Include="Aircraft.hpp" />
+    <ClInclude Include="AircraftShadow.hpp" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Category.h" />
     <ClInclude Include="Command.h" />

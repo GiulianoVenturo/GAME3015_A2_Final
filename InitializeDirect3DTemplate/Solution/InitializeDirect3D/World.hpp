@@ -2,6 +2,7 @@
 #include "SceneNode.hpp"
 #include <fstream>
 #include "Aircraft.hpp"
+#include "AircraftShadow.hpp"
 #include "SpriteNode.h"
 #include "CommandQueue.h"// add it for input
 #include "Command.h"// add it for input
@@ -60,6 +61,7 @@ private:
 	int                                 mBackgroundIndex;
 	Aircraft*							mRaptor1;
 	Aircraft*							mRaptor2;
+	AircraftShadow*                     mPlayerAircraftShadow;// add 
 	int                              Floorloopcounter; // add  to know how many times it's been loop
 	bool                             IsRaptorOneLimitX, IsRaptorTwoLimitX; // use control the enemie planes
 	float                            Raptor1_X , Raptor2_X;// used store the x value ememy air planes

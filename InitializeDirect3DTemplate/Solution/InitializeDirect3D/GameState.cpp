@@ -11,14 +11,17 @@ GameState::GameState(StateStack& stack, Context context)
 
 void GameState::draw()
 {
-	mWorld.draw();
+	if (GetIsActive() == true)
+	{
+		mWorld.draw();
+	}
 }
 
 bool GameState::update(const GameTimer& gt)
 {
-	mWorld.update(gt);
 	if (GetIsActive()&&!mWorld.isPaused)
 	{
+		mWorld.update(gt);
 	}
 
 	mWorld.updateSceneGraph(gt);

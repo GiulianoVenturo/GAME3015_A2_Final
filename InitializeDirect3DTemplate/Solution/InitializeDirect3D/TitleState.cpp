@@ -1,27 +1,31 @@
 #pragma region step 11
 #include "TitleState.h"
+#include "Game.h"
+#include "SpriteNode.h"
 
 TitleState::TitleState(StateStack& stack, Context context)
 	: State(stack, context)
 	, mSceneGraph(new SceneNode(context.mGame))
 	, mGame(context.mGame)
 {
-	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::TitleScreen, mGame));
-	mBackground = backgroundSprite.get();
-	mBackground->setPosition(0.0, 7.0, -6.1);
-	mBackground->setWorldRotation(3.14 / 10, 0, 0);
-	mBackground->setScale(7.0, 5.8, 5.0);
-	mSceneGraph->attachChild(std::move(backgroundSprite));
-
+	
+	SetIsActive(true);
 }
 
 void TitleState::draw()
 {
-	mSceneGraph->draw();
+	if (GetIsActive() == true)
+	{
+		mSceneGraph->draw();
+	}
 }
 
 bool TitleState::update(const GameTimer& gt)
 {
+
+	if (GetIsActive() == true)
+	{
+	}
 	mSceneGraph->update(gt);
 
 	return true;
@@ -29,30 +33,28 @@ bool TitleState::update(const GameTimer& gt)
 
 bool TitleState::handleEvent(WPARAM btnStat)
 {
-	// Press Any key
-	if (btnStat != 0)
+	if (btnStat != 0 && GetIsActive() == true)
 	{
+		//requestStackPush(States::Game);
+		//requestStackPop();
 		//requestStackPush(States::Menu);
-		ChangeScene(States::Menu);
-		//mStateStack.pushState(States::Menu);
-		//requestChangeState(States::Menu);
+		/*requestStackPop();
+		requestStackPush(States::Menu);*/
 
 		//requestStackPop();
 
-		/*requestStackPop();
-		//requestStackPush(States::Pause);
-
-		
-		//ChangeScene(States::Menu);
-		//requestChangeState(States::Menu);
-		SetIsActive(false);	
+	/*	requestStackPop();
+		requestStackPush(States::Pause);*/
+		requestChangeState(States::Menu);
+		SetIsActive(false);
 		//requestStackPop();
 		//requestStateRemoval(getStateID());
-		
+
 		original = mBackground->getWorldScale();
 		mBackground->setScale(0, 0, 0);
 		//ChangeScene(States::Pause);
-		*/
+		//ChangeScene(States::Pause);
+
 	}
 	return true;
 }
@@ -60,16 +62,25 @@ bool TitleState::handleEvent(WPARAM btnStat)
 
 void TitleState::buildScene()
 {
+
+	std::unique_ptr<BackGround> backgroundSprite(new BackGround(BackGround::TitleScreen, mGame));
+	mBackground = backgroundSprite.get();
+	mBackground->setPosition(0.0, 7.0, -6.1);
+	mBackground->setWorldRotation(3.14/10, 0, 0);
+	mBackground->setScale(10.0, 5.8, 5.0);
+	mSceneGraph->attachChild(std::move(backgroundSprite));
+
+
 	mSceneGraph->build();
+	
 }
 void TitleState::SetScene()
 {
-	mBackground->setScale(7.0, 5.8, 5.0);
+	//mBackground->setScale(7.0, 5.8, 5.0);
 
 }
 void TitleState::HideScene()
 {
-	//mBackground->setScale(0.0, 0.0, 0.0);
 
 }
 #pragma endregion

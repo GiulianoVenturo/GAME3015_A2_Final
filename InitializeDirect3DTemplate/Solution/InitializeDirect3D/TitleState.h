@@ -2,6 +2,7 @@
 #include "State.h"
 #include "UIHandler.h"
 
+
 class TitleState : public State
 {
 public:
@@ -23,4 +24,7 @@ private:
 	UIHandler* mUIHandler;
 	SceneNode* mSceneGraph;
 	Game* mGame;
+
+	//bool mShowText;
+	//float mTextEffectTime;
 };

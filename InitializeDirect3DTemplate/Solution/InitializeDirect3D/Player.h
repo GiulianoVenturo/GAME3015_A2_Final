@@ -4,10 +4,7 @@
 #include "Input.h"
 #include "map"
 
-
-
 class CommandQueue;
-
 
 class Player
 {

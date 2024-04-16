@@ -10,7 +10,7 @@ void DebugShadowMap::drawCurrent() const
 	renderer->World = getTransform();
 	renderer->NumFramesDirty++;
 
-	//cmdList->SetPipelineState(game->GetPSOs()["debug"].Get());
+	//game->GetmCommandList()->SetPipelineState(game->GetPSOs()["debug"].Get());
 
 	auto vbv = renderer->Geo->VertexBufferView();
 	auto ibv = renderer->Geo->IndexBufferView();

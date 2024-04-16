@@ -18,7 +18,6 @@ void Skybox::drawCurrent() const
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 	auto objectCB = game->GetmCurrFrameResource()->ObjectCB->Resource();
 
-
 	game->GetmCommandList()->IASetVertexBuffers(0, 1, &vbv);
 	game->GetmCommandList()->IASetIndexBuffer(&ibv);
 	game->GetmCommandList()->IASetPrimitiveTopology(renderer->PrimitiveType);

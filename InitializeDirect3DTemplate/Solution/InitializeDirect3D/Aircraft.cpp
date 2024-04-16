@@ -1,8 +1,8 @@
 #include "Aircraft.hpp"
+#include "DirectXMath.h"
 #include "Game.h"
 
-Aircraft::Aircraft(Type type, Game* game) : Entity(game)
-	, mType(type)
+Aircraft::Aircraft(Type type, Game* game) : Entity(game), mType(type)
 {
 	switch (type)
 	{
@@ -28,7 +28,7 @@ void Aircraft::drawCurrent() const
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 	auto objectCB = game->GetmCurrFrameResource()->ObjectCB->Resource();
 
-	
+
 	game->GetmCommandList()->IASetVertexBuffers(0, 1, &vbv);
 	game->GetmCommandList()->IASetIndexBuffer(&ibv);
 	game->GetmCommandList()->IASetPrimitiveTopology(renderer->PrimitiveType);
@@ -54,7 +54,18 @@ void Aircraft::buildCurrent()
 	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
 	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
 
-
 	game->mRitemLayer[(int)RenderLayer::Opaque].push_back(render.get());
 	game->getRenderItems().push_back(std::move(render));
+}
+
+unsigned int Aircraft::getCategory() const
+{
+	switch (mType)
+	{
+	case Eagle:
+		return Category::PlayerAircraft;
+
+	default:
+		return Category::EnemyAircraft;
+	}
 }

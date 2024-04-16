@@ -1,3 +1,7 @@
+//***************************************************************************************
+// SsaoApp.cpp by Frank Luna (C) 2015 All Rights Reserved.
+//***************************************************************************************
+
 #include "Game.h"
 #include "TitleState.h"
 #include "GameState.h"
@@ -36,7 +40,7 @@ Game::Game(HINSTANCE hInstance)
     // the world space origin.  In general, you need to loop over every world space vertex
     // position and compute the bounding sphere.
     mSceneBounds.Center = XMFLOAT3(0.0f, 10.0f, -15.0f);
-    mSceneBounds.Radius = sqrtf(50.0f*50.0f*2.0f);
+    mSceneBounds.Radius = sqrtf(50.0f*50.0f + 55.0f*55.0f);
 }
 
 Game::~Game()
@@ -50,13 +54,12 @@ bool Game::Initialize()
     if(!D3DApp::Initialize())
         return false;
 
-    
     registerStates();
-
-    // Push Title when open the game
+    mStateStack.pushState(States::Menu);
+    mStateStack.pushState(States::Game);
     mStateStack.pushState(States::Title);
-    //mStateStack.pushState(States::Menu);
-
+    mStateStack.pushState(States::Pause);
+    //mStateStack.applyPendingChanges();
 
     // Reset the command list to prep for initialization commands.
     ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
@@ -64,7 +67,8 @@ bool Game::Initialize()
 	mCamera.SetPosition(0.0f, 10.0f, -15.0f);
     mCamera.Pitch(3.14 / 10);
  
-    mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(), 2048, 2048);
+    mShadowMap = std::make_unique<ShadowMap>(md3dDevice.Get(),
+        2048, 2048);
 
     mSsao = std::make_unique<Ssao>(
         md3dDevice.Get(),
@@ -77,7 +81,7 @@ bool Game::Initialize()
 	BuildDescriptorHeaps();
     BuildShadersAndInputLayout();
     BuildShapeGeometry();
-    BuildSkullGeometry();
+    //BuildSkullGeometry();
 
 	BuildMaterials();
 
@@ -129,6 +133,7 @@ void Game::OnResize()
     if(mSsao != nullptr)
     {
         mSsao->OnResize(mClientWidth, mClientHeight);
+
         // Resources changed, so need to rebuild descriptors.
         mSsao->RebuildDescriptors(mDepthStencilBuffer.Get());
     }
@@ -137,7 +142,6 @@ void Game::OnResize()
 void Game::Update(const GameTimer& gt)
 {
     OnKeyboardInput(gt);
-   // mWorld.update(gt);
     
     mStateStack.update(gt);
     
@@ -284,8 +288,7 @@ void Game::Draw(const GameTimer& gt)
     skyTexDescriptor.Offset(mSkyTexHeapIndex, mCbvSrvUavDescriptorSize);
     mCommandList->SetGraphicsRootDescriptorTable(3, skyTexDescriptor);
 
-
-
+    //mWorld.draw();
     mStateStack.draw();
 
     mCommandList->SetPipelineState(mPSOs["opaque"].Get());
@@ -330,51 +333,48 @@ void Game::OnMouseDown(WPARAM btnState, int x, int y)
     SetCapture(mhMainWnd);
 }
 
-void Game::OnKeyDown(WPARAM btnState) // add for input
+void Game::OnKeyDown(WPARAM btnState)
 {
     ProcessEvents(btnState);
 }
-
 void Game::OnMouseUp(WPARAM btnState, int x, int y)
 {
     ReleaseCapture();
 }
 
+
 void Game::OnMouseMove(WPARAM btnState, int x, int y)
 {
-    /*
-    if((btnState & MK_LBUTTON) != 0)
-    {
-		// Make each pixel correspond to a quarter of a degree.
-		float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
+  //  if((btnState & MK_LBUTTON) != 0)
+  //  {
+		//// Make each pixel correspond to a quarter of a degree.
+		//float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
+		//float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
 
-		mCamera.Pitch(dy);
-		mCamera.RotateY(dx);
-    }
+		//mCamera.Pitch(dy);
+		//mCamera.RotateY(dx);
+  //  }
 
-    mLastMousePos.x = x;
-    mLastMousePos.y = y;
-    */
+  //  mLastMousePos.x = x;
+  //  mLastMousePos.y = y;
 }
  
 
 void Game::OnKeyboardInput(const GameTimer& gt)
 {
-    //!check
 	/*const float dt = gt.DeltaTime();
 
 	if(GetAsyncKeyState('W') & 0x8000)
-		mCamera.Walk(10.0f*dt);
+		mCamera.Walk(40.0f*dt);
 
 	if(GetAsyncKeyState('S') & 0x8000)
-		mCamera.Walk(-10.0f*dt);
+		mCamera.Walk(-40.0f*dt);
 
 	if(GetAsyncKeyState('A') & 0x8000)
-		mCamera.Strafe(-10.0f*dt);
+		mCamera.Strafe(-40.0f*dt);
 
 	if(GetAsyncKeyState('D') & 0x8000)
-		mCamera.Strafe(10.0f*dt);*/
+		mCamera.Strafe(40.0f*dt);*/
 
 	mCamera.UpdateViewMatrix();
 }
@@ -613,21 +613,22 @@ void Game::LoadTextures()
 		"bricksNormalMap",
 		"tileDiffuseMap",
 		"tileNormalMap",
-        "DesertDiffuseMap",// add
-        "DesertNormalMap", //add
-        "EagleDiffuseMap", //add
-        "EagleNormalMap", //add
-        "RaptorDiffuseMap",//add
-        "RaptorNormalMap",//add
-        "TitleScreenDiffuseMap", /// add just <- TitleScreen
-        "TitleScreenNormalMap",/// add just <- TitleScreenNmap
-        "MenuScreenDiffuseMap",/// add just <- PressAnyKey 
-        "MenuScreenNMap",/// add just <- PressAnyKeyNMap  
-        "PauseScreenDiffuseMap",/// add just <- PressAnyKey 
-        "PauseScreenNMap",/// add just <- PressAnyKeyNMap
+        "DesertDiffuseMap",
+        "DesertNormalMap", 
+        "EagleDiffuseMap", 
+        "EagleNormalMap", 
+        "RaptorDiffuseMap",
+        "RaptorNormalMap",
+        "TitleScreenDiffuseMap", 
+        "TitleScreenNormalMap",
+        "MenuScreenDiffuseMap",
+        "MenuScreenNMap",
+        "PauseScreenDiffuseMap",
+        "PauseScreenNMap",
 		"defaultDiffuseMap",
 		"defaultNormalMap",
 		"skyCubeMap"
+
 	};
 	
     std::vector<std::wstring> texFilenames =
@@ -636,21 +637,23 @@ void Game::LoadTextures()
         L"../../Textures/bricks2_nmap.dds",
         L"../../Textures/tile.dds",
         L"../../Textures/tile_nmap.dds",
-        L"../../Textures/Desert.dds", // add
-        L"../../Textures/DesertNMap.dds", //add
-        L"../../Textures/Eagle.dds", //add 
-        L"../../Textures/EagleNMap.dds", //add
-        L"../../Textures/Raptor.dds", //add
-        L"../../Textures/RaptorNor.dds", //add
-        L"../../Textures/TitleScreen2.dds", //add <- titlesceem 
-        L"../../Textures/TitleScreen2NMap.dds", //add <- TitleScreenNMap
-        L"../../Textures/MenuScreenV2.dds", //add <- PressAnyKey
-        L"../../Textures/MenuScreenV2NMap.dds", //add <- PressAnyKeyNMap  
-        L"../../Textures/PauseScreen.dds", //add <- PressAnyKey
-        L"../../Textures/PauseScreenNMap.dds", //add <- PressAnyKeyNMap
+         L"../../Textures/Desert.dds", 
+        L"../../Textures/DesertNMap.dds", 
+        L"../../Textures/Eagle.dds", 
+        L"../../Textures/EagleNMap.dds", 
+        L"../../Textures/Raptor.dds", 
+        L"../../Textures/RaptorNor.dds", 
+        L"../../Textures/bricks.dds", 
+        L"../../Textures/PressAnyKeyNMap.dds", 
+        L"../../Textures/MenuScreenV2.dds", 
+        L"../../Textures/MenuScreenV2NMap.dds", 
+        L"../../Textures/PauseScreen.dds", 
+        L"../../Textures/PauseScreenNMap.dds", 
         L"../../Textures/white1x1.dds",
         L"../../Textures/default_nmap.dds",
         L"../../Textures/desertcube1024.dds" 
+       
+
     };
 	
 	for(int i = 0; i < (int)texNames.size(); ++i)
@@ -807,28 +810,28 @@ void Game::BuildDescriptorHeaps()
 
 	std::vector<ComPtr<ID3D12Resource>> tex2DList = 
 	{
-		mTextures["bricksDiffuseMap"]->Resource,// 1
-		mTextures["bricksNormalMap"]->Resource,// 2
-		mTextures["tileDiffuseMap"]->Resource,// 3
-		mTextures["tileNormalMap"]->Resource,// 4
-        mTextures["DesertDiffuseMap"]->Resource,// add // 5
-        mTextures["DesertNormalMap"]->Resource,//add // 6
-        mTextures["EagleDiffuseMap"]->Resource,//add //7
-        mTextures["EagleNormalMap"]->Resource,//add // 8 
-        mTextures["RaptorDiffuseMap"]->Resource,//add //9
-        mTextures["RaptorNormalMap"]->Resource,//add // 10
-        mTextures["TitleScreenDiffuseMap"]->Resource,//add // 11  <- 
-        mTextures["TitleScreenNormalMap"]->Resource,//add // 12  <-
-        mTextures["MenuScreenDiffuseMap"]->Resource,//add // 13  <- 
-        mTextures["MenuScreenNMap"]->Resource,//add // 14  <- 
-        mTextures["PauseScreenDiffuseMap"]->Resource,//add // 13  <- 
-        mTextures["PauseScreenNMap"]->Resource,//add // 14  <-
-		mTextures["defaultDiffuseMap"]->Resource,// 15
-		mTextures["defaultNormalMap"]->Resource// 16
+		mTextures["bricksDiffuseMap"]->Resource,
+		mTextures["bricksNormalMap"]->Resource,
+		mTextures["tileDiffuseMap"]->Resource,
+		mTextures["tileNormalMap"]->Resource,
+        mTextures["DesertDiffuseMap"]->Resource,
+        mTextures["DesertNormalMap"]->Resource,
+        mTextures["EagleDiffuseMap"]->Resource,
+        mTextures["EagleNormalMap"]->Resource,
+        mTextures["RaptorDiffuseMap"]->Resource,
+        mTextures["RaptorNormalMap"]->Resource,
+        mTextures["TitleScreenDiffuseMap"]->Resource,
+        mTextures["TitleScreenNormalMap"]->Resource,
+        mTextures["MenuScreenDiffuseMap"]->Resource,
+        mTextures["MenuScreenNMap"]->Resource,
+        mTextures["PauseScreenDiffuseMap"]->Resource,
+        mTextures["PauseScreenNMap"]->Resource,
+		mTextures["defaultDiffuseMap"]->Resource,
+		mTextures["defaultNormalMap"]->Resource
        
 	};
 	
-	auto skyCubeMap = mTextures["skyCubeMap"]->Resource;// 17
+	auto skyCubeMap = mTextures["skyCubeMap"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -1374,8 +1377,8 @@ void Game::BuildMaterials()
     bricks0->DiffuseSrvHeapIndex = 0;
     bricks0->NormalSrvHeapIndex = 1;
     bricks0->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-    bricks0->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
-    bricks0->Roughness = 0.3f;
+    bricks0->FresnelR0 = XMFLOAT3(0.12f, 0.12f, 0.12f);
+    bricks0->Roughness = 0.21f;
 
     auto tile0 = std::make_unique<Material>();
     tile0->Name = "tile0";
@@ -1383,8 +1386,8 @@ void Game::BuildMaterials()
     tile0->DiffuseSrvHeapIndex = 2;
     tile0->NormalSrvHeapIndex = 3;
     tile0->DiffuseAlbedo = XMFLOAT4(0.9f, 0.9f, 0.9f, 1.0f);
-    tile0->FresnelR0 = XMFLOAT3(0.2f, 0.2f, 0.2f);
-    tile0->Roughness = 0.1f;
+    tile0->FresnelR0 = XMFLOAT3(0.11f, 0.11f, 0.11f);
+    tile0->Roughness = 0.3f;
 
     auto mirror0 = std::make_unique<Material>();
     mirror0->Name = "mirror0";
@@ -1399,18 +1402,18 @@ void Game::BuildMaterials()
     auto Desert = std::make_unique<Material>();
     Desert->Name = "Desert";
     Desert->MatCBIndex = 4;
-    Desert->DiffuseSrvHeapIndex = 4;//6;
-    Desert->NormalSrvHeapIndex = 5;//7;
+    Desert->DiffuseSrvHeapIndex = 4;
+    Desert->NormalSrvHeapIndex = 5;
     Desert->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-    Desert->FresnelR0 = XMFLOAT3(0.2f, 0.2f, 0.2f);
+    Desert->FresnelR0 = XMFLOAT3(0.1f, 0.14f, 0.1f);
     Desert->Roughness = 1.0f;
  
 
     auto Eagle = std::make_unique<Material>();
     Eagle->Name = "Eagle";
     Eagle->MatCBIndex = 5;
-    Eagle->DiffuseSrvHeapIndex = 6; //8;
-    Eagle->NormalSrvHeapIndex = 7;// 9;
+    Eagle->DiffuseSrvHeapIndex = 6; 
+    Eagle->NormalSrvHeapIndex = 7;
     Eagle->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     Eagle->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
     Eagle->Roughness = 0.2f;
@@ -1419,8 +1422,8 @@ void Game::BuildMaterials()
     auto Raptor = std::make_unique<Material>();
     Raptor->Name = "Raptor";
     Raptor->MatCBIndex = 6;
-    Raptor->DiffuseSrvHeapIndex = 8; //8;
-    Raptor->NormalSrvHeapIndex = 9;// 9;
+    Raptor->DiffuseSrvHeapIndex = 8; 
+    Raptor->NormalSrvHeapIndex = 9;
     Raptor->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     Raptor->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
     Raptor->Roughness = 0.2f;
@@ -1429,8 +1432,8 @@ void Game::BuildMaterials()
     auto TitleScreen = std::make_unique<Material>();
     TitleScreen->Name = "TitleScreen";
     TitleScreen->MatCBIndex = 7;
-    TitleScreen->DiffuseSrvHeapIndex = 10; //8;
-    TitleScreen->NormalSrvHeapIndex = 11;// 9;
+    TitleScreen->DiffuseSrvHeapIndex = 10; 
+    TitleScreen->NormalSrvHeapIndex = 11;
     TitleScreen->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     TitleScreen->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
     TitleScreen->Roughness = 0.1f;
@@ -1438,8 +1441,8 @@ void Game::BuildMaterials()
     auto MenuScreen = std::make_unique<Material>();
     MenuScreen->Name = "MenuScreen";
     MenuScreen->MatCBIndex = 8;
-    MenuScreen->DiffuseSrvHeapIndex = 12; //8;
-    MenuScreen->NormalSrvHeapIndex = 13;// 9;
+    MenuScreen->DiffuseSrvHeapIndex = 12;
+    MenuScreen->NormalSrvHeapIndex = 13;
     MenuScreen->DiffuseAlbedo = XMFLOAT4(2.0f, 2.0f, 2.0f, 2.0f);
     MenuScreen->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
     MenuScreen->Roughness = 0.1f; 
@@ -1447,17 +1450,17 @@ void Game::BuildMaterials()
     auto PauseScreen = std::make_unique<Material>();
     PauseScreen->Name = "PauseScreen";
     PauseScreen->MatCBIndex = 9;
-    PauseScreen->DiffuseSrvHeapIndex = 14; //8;
-    PauseScreen->NormalSrvHeapIndex = 16;// 9;
+    PauseScreen->DiffuseSrvHeapIndex = 14;
+    PauseScreen->NormalSrvHeapIndex = 16;
     PauseScreen->DiffuseAlbedo = XMFLOAT4(2.0f, 2.0f, 2.0f, 2.0f);
     PauseScreen->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
     PauseScreen->Roughness = 0.1f;
 
     auto sky = std::make_unique<Material>();
     sky->Name = "sky";
-    sky->MatCBIndex = 9;// 7
-    sky->DiffuseSrvHeapIndex = 13;// 12
-    sky->NormalSrvHeapIndex = 12; // 13
+    sky->MatCBIndex = 9;
+    sky->DiffuseSrvHeapIndex = 13;
+    sky->NormalSrvHeapIndex = 12;
     sky->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
     sky->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
     sky->Roughness = 1.0f;
@@ -1615,8 +1618,6 @@ void Game::registerStates()
 
 }
 
-
-
 CD3DX12_CPU_DESCRIPTOR_HANDLE Game::GetCpuSrv(int index)const
 {
     auto srv = CD3DX12_CPU_DESCRIPTOR_HANDLE(mSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
@@ -1714,3 +1715,4 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 7> Game::GetStaticSamplers()
         shadow 
     };
 }
+

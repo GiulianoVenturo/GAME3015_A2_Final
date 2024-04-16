@@ -54,10 +54,10 @@ public:
 
 	CommandQueue& getCommandQueue(); /// add it for input
 
+	void				applyPendingChanges();
 
 private:
 	State::Ptr			createState(States::ID stateID);
-	void				applyPendingChanges();
 
 
 private:
