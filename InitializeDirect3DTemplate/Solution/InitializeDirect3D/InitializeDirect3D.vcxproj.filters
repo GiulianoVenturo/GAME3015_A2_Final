@@ -54,9 +54,6 @@
     <ClCompile Include="Aircraft.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AircraftShadow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MenuState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -216,9 +210,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Category.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AircraftShadow.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Aircraft.hpp">

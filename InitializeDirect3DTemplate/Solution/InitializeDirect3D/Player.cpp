@@ -1,18 +1,10 @@
 
 #include "Player.h"
 #include "SceneNode.hpp"
-
-#pragma region step 18
 #include "Player.h"
 #include "CommandQueue.h"
 #include "Aircraft.hpp"
 #include "Game.h"
-
-#include "map"
-#include "string"
-#include "algorithm"
-#include "iostream"
-#include <fstream>
 
 const float Player::PlayerSpeed = 40.0f;
 
@@ -96,35 +88,23 @@ void Player::handleRealtimeInput(CommandQueue& commands)
 }
 void Player::initializeActions()
 {
-	
 }
 
 void Player::handleEvent(CommandQueue& commands, WPARAM btnState)
 {
 	Input::Keys tempKeys;
 
-	 tempKeys = (Input::Keys)btnState;
+	tempKeys = (Input::Keys)btnState;
 
 	auto found = mKeyBinding.find(tempKeys);
 	if (found != mKeyBinding.end() && !isRealtimeAction(found->second))
 		commands.push(mActionBinding[found->second]);
-
 }
 
 
 bool Player::isRealtimeAction(Action action)
 {
-	switch (action)
-	{
-	case MoveLeft:
-	case MoveRight:
-	case MoveDown:
-	case MoveUp:
-		return true;
-
-	default:
-		return false;
-	}
+	return false;
 }
 
 void Player::assignKey(Action action, Input::Keys key)
@@ -137,7 +117,6 @@ void Player::assignKey(Action action, Input::Keys key)
 		else
 			++itr;
 	}
-
 	// Insert new binding
 	mKeyBinding[key] = action;
 }
@@ -152,6 +131,5 @@ Input::Keys Player::getAssignedKey(Action action) const
 
 	return Input::Keys::Unknown;
 }
-
 
 #pragma endregion

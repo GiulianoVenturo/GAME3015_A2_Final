@@ -1,7 +1,4 @@
-
 #pragma region
-/// add it for input
-///
 #include "CommandQueue.h"
 #include "SceneNode.hpp""
 void CommandQueue::push(const Command& command)

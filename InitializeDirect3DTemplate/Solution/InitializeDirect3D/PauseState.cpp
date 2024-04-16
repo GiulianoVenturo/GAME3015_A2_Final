@@ -14,16 +14,11 @@ PauseState::PauseState(StateStack& stack, Context context)
 void PauseState::draw()
 {
 	if (GetIsActive() == true)
-	{
 		mSceneGraph->draw();
-	}
 }
 
 bool PauseState::update(const GameTimer& gt)
 {
-	if (GetIsActive() == true)
-	{
-	}
 	mSceneGraph->update(gt);
 
 	return true;
@@ -41,7 +36,7 @@ bool PauseState::handleEvent(WPARAM btnStat)
 			mBackground->setScale(0.0, 0, 0);
 			return false;
 		}
-		if (btnStat == Input::R)
+		if (btnStat == Input::Z)
 		{
 			SetIsActive(false);
 			mBackground->setScale(0.0, 0, 0);
@@ -49,8 +44,6 @@ bool PauseState::handleEvent(WPARAM btnStat)
 			requestChangeState(States::Menu);
 		}
 	}
-
-	
 	return true;
 }
 

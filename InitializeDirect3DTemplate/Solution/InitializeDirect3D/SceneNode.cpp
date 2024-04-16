@@ -1,9 +1,6 @@
 #include "SceneNode.hpp"
 #include "Game.h"
 
-#include "Command.h"// add it for input
-#include <algorithm>// add it for input
-#include <cassert>// add it for input
 
 SceneNode::SceneNode(Game* game)
 	: mChildren()
@@ -119,21 +116,6 @@ void SceneNode::setScale(float x, float y, float z)
 	mWorldScaling = XMFLOAT3(x, y, z);
 }
 
-//XMFLOAT4X4 SceneNode::getWorldTransform() const
-//{
-//	XMFLOAT4X4 transform = MathHelper::Identity4x4();
-//	XMMATRIX T = XMLoadFloat4x4(&transform);
-//
-//	for (const SceneNode* node = this; node != nullptr; node = node->mParent)
-//	{
-//		XMMATRIX Tp = XMLoadFloat4x4(&node->getTransform());
-//		T = Tp * T;
-//	}
-//	XMStoreFloat4x4(&transform, T);
-//
-//	return transform;
-//}
-
 XMFLOAT4X4 SceneNode::getWorldTransform() const
 {
 	XMFLOAT4X4 transform = MathHelper::Identity4x4();
@@ -161,7 +143,6 @@ XMFLOAT4X4 SceneNode::getTransform() const
 	return transform;
 }
 
- //gettters
 float SceneNode::getWorldPositionX()
 {
 	return (float)mWorldPosition.x;
@@ -183,15 +164,11 @@ void SceneNode::move(float x, float y, float z)
 	mWorldPosition.z += z;
 }
 
-// add it for it input
-//make sure Command.hpp is included!
 void SceneNode::onCommand(const Command& command, const float dt)
 {
-	// Command current node, if category matches
 	if (command.category & getCategory())
 		command.action(*this, dt);
 
-	// Command children
 	for (Ptr& child : mChildren)
 		child->onCommand(command, dt);
 }

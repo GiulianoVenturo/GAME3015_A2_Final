@@ -2,10 +2,9 @@
 #include "SceneNode.hpp"
 #include <fstream>
 #include "Aircraft.hpp"
-#include "AircraftShadow.hpp"
 #include "SpriteNode.h"
-#include "CommandQueue.h"// add it for input
-#include "Command.h"// add it for input
+#include "CommandQueue.h"
+#include "Command.h"
 #include "DebugShadowMap.h"
 #include "Skybox.h"
 
@@ -15,7 +14,6 @@ public:
 	explicit							World(Game* window);
 	void								update(const GameTimer& gt);
 	void								updateSceneGraph(const GameTimer& gt);
-//	void								OnPlayerInput(const GameTimer& gt);
 	void								MoveRaptorSideToSide(const GameTimer& gt);
 	void								LoopBackGround(const GameTimer& gt);
 	void                                PlayerBorderDistance(const GameTimer& gt);
@@ -25,10 +23,8 @@ public:
 	bool								handleEvent(WPARAM btnStat, bool isActive);
 	bool								isPaused;
 
-
-	//void								loadTextures();
 	void								buildScene();
-	CommandQueue&                       getCommandQueue(); /// add it for input
+	CommandQueue&                       getCommandQueue(); 
 
 private:
 	enum Layer
@@ -61,7 +57,6 @@ private:
 	int                                 mBackgroundIndex;
 	Aircraft*							mRaptor1;
 	Aircraft*							mRaptor2;
-	AircraftShadow*                     mPlayerAircraftShadow;// add 
 	int                              Floorloopcounter; // add  to know how many times it's been loop
 	bool                             IsRaptorOneLimitX, IsRaptorTwoLimitX; // use control the enemie planes
 	float                            Raptor1_X , Raptor2_X;// used store the x value ememy air planes

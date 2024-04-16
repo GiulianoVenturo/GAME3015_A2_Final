@@ -81,7 +81,6 @@ bool Game::Initialize()
 	BuildDescriptorHeaps();
     BuildShadersAndInputLayout();
     BuildShapeGeometry();
-    //BuildSkullGeometry();
 
 	BuildMaterials();
 
@@ -216,8 +215,6 @@ void Game::Draw(const GameTimer& gt)
     // that we only have to specify the first descriptor in the table.  
     // The root signature knows how many descriptors are expected in the table.
     mCommandList->SetGraphicsRootDescriptorTable(4, mSrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
-
-
    
 
     DrawSceneToShadowMap();
@@ -345,18 +342,6 @@ void Game::OnMouseUp(WPARAM btnState, int x, int y)
 
 void Game::OnMouseMove(WPARAM btnState, int x, int y)
 {
-  //  if((btnState & MK_LBUTTON) != 0)
-  //  {
-		//// Make each pixel correspond to a quarter of a degree.
-		//float dx = XMConvertToRadians(0.25f*static_cast<float>(x - mLastMousePos.x));
-		//float dy = XMConvertToRadians(0.25f*static_cast<float>(y - mLastMousePos.y));
-
-		//mCamera.Pitch(dy);
-		//mCamera.RotateY(dx);
-  //  }
-
-  //  mLastMousePos.x = x;
-  //  mLastMousePos.y = y;
 }
  
 
@@ -374,22 +359,18 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 		mCamera.Strafe(-40.0f*dt);
 
 	if(GetAsyncKeyState('D') & 0x8000)
-		mCamera.Strafe(40.0f*dt);*/
+		mCamera.Strafe(40.0f*dt);
+    */
 
 	mCamera.UpdateViewMatrix();
+    
 }
 void Game::ProcessEvents(WPARAM btnState)
 {
-    //CommandQueue& commands = mStateStack.mWorld();
-
-   /* CommandQueue& commands = mStateStack.getCommandQueue();
-    mPlayer.handleRealtimeInput(commands);
-    mPlayer.handleEvent(commands, btnState);*/
     mStateStack.handleEvent(btnState);
 }
 void Game::AnimateMaterials(const GameTimer& gt)
 {
-	
 }
 
 void Game::UpdateObjectCBs(const GameTimer& gt)
@@ -844,7 +825,6 @@ void Game::BuildDescriptorHeaps()
 		srvDesc.Texture2D.MipLevels = tex2DList[i]->GetDesc().MipLevels;
 		md3dDevice->CreateShaderResourceView(tex2DList[i].Get(), &srvDesc, hDescriptor);
 
-		// next descriptor
 		hDescriptor.Offset(1, mCbvSrvUavDescriptorSize);
 	}
 	

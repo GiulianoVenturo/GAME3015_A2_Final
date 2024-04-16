@@ -45,7 +45,7 @@ void  BackGround::buildCurrent()
 	auto render = std::make_unique<RenderItem>();
 	renderer = render.get();
 	renderer->World = getTransform();
-	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));//XMMatrixScaling(1.0f, 1.0f, 1.0f));
+	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, 1.0f, 1.0f));
 	renderer->ObjCBIndex = game->getRenderItems().size();
 	renderer->Mat = game->getMaterials()[mSprite].get();
 	renderer->Geo = game->getGeometries()["shapeGeo"].get();

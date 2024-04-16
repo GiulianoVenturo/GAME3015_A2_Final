@@ -12,17 +12,13 @@ GameState::GameState(StateStack& stack, Context context)
 void GameState::draw()
 {
 	if (GetIsActive() == true)
-	{
 		mWorld.draw();
-	}
 }
 
 bool GameState::update(const GameTimer& gt)
 {
 	if (GetIsActive()&&!mWorld.isPaused)
-	{
 		mWorld.update(gt);
-	}
 
 	mWorld.updateSceneGraph(gt);
 	return true;
@@ -37,18 +33,10 @@ bool GameState::handleEvent(WPARAM btnStat)
 {
 	if (GetIsActive())
 	{
-		if (btnStat == Input::P)
+		if (btnStat == Input::P && !mWorld.isPaused)
 		{
-			if (!mWorld.isPaused)
-			{
-				requestChangeState(States::Pause);
-				mWorld.isPaused = true;
-			}
-
-
-
-
-
+			requestChangeState(States::Pause);
+			mWorld.isPaused = true;
 		}
 	}
 	if (GetIsActive() && !mWorld.isPaused)
@@ -63,14 +51,9 @@ bool GameState::handleEvent(WPARAM btnStat)
 void GameState::SetScene()
 {
 	if (GetIsActive())
-	{
 		mWorld.isPaused = false;
-	}
-
-	//mWorld.SetScene();
 
 }
 void GameState::HideScene()
 {
-
 }
