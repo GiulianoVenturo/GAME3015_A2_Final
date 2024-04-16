@@ -1,5 +1,4 @@
 #include "MenuState.h"
-#include "Skybox.h"
 #include "Input.h"
 #include "Game.h"
 

@@ -9,11 +9,6 @@ class CommandQueue;
 class Player
 {
 public:
-	Player();
-	static const float		PlayerSpeed;
-	void                    handleEvent(CommandQueue& commands, WPARAM btnState);
-	void					handleRealtimeInput(CommandQueue& commands);
-
 	enum Action
 	{
 		MoveLeft,
@@ -24,17 +19,20 @@ public:
 		ActionCount
 	};
 
+	Player();
+	static const float		PlayerSpeed;
+	void                    handleEvent(CommandQueue& commands, WPARAM btnState);
+	void					handleRealtimeInput(CommandQueue& commands);
 	void					assignKey(Action action, Input::Keys key);
 	Input::Keys		        getAssignedKey(Action action) const;
 
 private:
-	  void					initializeActions();
+	void					initializeActions();
 	static bool				isRealtimeAction(Action action);
-	/*static bool             isEventAction(Action action);*/
 
 private:
 	std::map< Input::Keys, Action>		mKeyBinding;
-	std::map<Action, Command>				mActionBinding;
+	std::map<Action, Command>			mActionBinding;
 };
 #pragma endregion
 

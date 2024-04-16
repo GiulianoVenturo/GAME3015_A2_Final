@@ -1,13 +1,11 @@
 #pragma once
 #pragma region step 1
 
-// Forward declaration of SFML classes
 namespace sf
 {
 	class Texture;
 	class Font;
 }
-
 namespace Textures
 {
 	enum ID
@@ -27,7 +25,6 @@ namespace Fonts
 	};
 }
 
-// Forward declaration and a few type definitions
 template <typename Resource, typename Identifier>
 class ResourceHolder;
 

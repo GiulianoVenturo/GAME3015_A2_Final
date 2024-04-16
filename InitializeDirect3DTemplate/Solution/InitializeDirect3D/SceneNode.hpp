@@ -5,7 +5,7 @@
 #include "../../Common/GeometryGenerator.h"
 #include "../../Common/Camera.h"
 #include "FrameResource.h"
-#include "Category.h" // add it   
+#include "Category.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -13,10 +13,7 @@ using namespace DirectX::PackedVector;
 
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "D3D12.lib")
-
-
-struct Command;// add it for input
-
+struct Command;
 
 // Lightweight structure stores parameters to draw a shape.  This will
 // vary from app-to-app.
@@ -70,10 +67,9 @@ public:
 	void					draw() const;
 	void					build();
 
-	float				    getWorldPositionZ();// get Z
-	float				    getWorldPositionY();// get Y
-	float				    getWorldPositionX();// get X
-	
+	float				    getWorldPositionZ();
+	float				    getWorldPositionY();
+	float				    getWorldPositionX();
 
 	XMFLOAT3				getWorldPosition() const;
 	void					setPosition(float x, float y, float z);
@@ -87,10 +83,6 @@ public:
 
 	void					move(float x, float y, float z);
 
-	/// <summary>
-	/// add for it input
-	/// </summary>
-	/// <param name="command"></param>
 	void					onCommand(const Command& command, const float dt);
 	virtual unsigned int	getCategory() const;
 

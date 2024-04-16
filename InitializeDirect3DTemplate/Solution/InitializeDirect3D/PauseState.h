@@ -1,6 +1,5 @@
 #pragma once
 #include "State.h"
-#include "Skybox.h"// test
 #include "UIHandler.h"
 
 class PauseState :
@@ -12,13 +11,12 @@ public:
 	virtual bool   update(const GameTimer& gt);
 	virtual bool   handleEvent(WPARAM btnStat);
 	virtual void   buildScene();
-	virtual void		SetScene();
-	virtual void		HideScene();
+	virtual void   SetScene();
+	virtual void   HideScene();
 	virtual States::ID  getStateID() { return States::Pause; }
 
 private:
 	BackGround* mBackground;
-	Skybox*     mSkybox2;// testing
 	UIHandler* mUIHandler;
 	SceneNode* mSceneGraph;
 	Game* mGame;

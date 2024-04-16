@@ -2,12 +2,11 @@
 #include "State.h"
 #include "UIHandler.h"
 
-
 class TitleState : public State
 {
 public:
 	TitleState(StateStack& stack, Context context);
-
+	virtual States::ID   getStateID() { return States::Title; }
 
 	virtual void		draw();
 	virtual bool		update(const GameTimer& gt);
@@ -16,15 +15,9 @@ public:
 	virtual void		SetScene();
 	virtual void		HideScene();
 
-	virtual States::ID   getStateID() { return States::Title; }
-
-
 private:
 	BackGround* mBackground;
 	UIHandler* mUIHandler;
 	SceneNode* mSceneGraph;
 	Game* mGame;
-
-	//bool mShowText;
-	//float mTextEffectTime;
 };

@@ -4,20 +4,14 @@ World::World(Game* game)
 	: mSceneGraph(new SceneNode(game))
 	, mGame(game)
 	, mPlayerAircraft(nullptr)
-	, mRaptor1(nullptr)
-	, mRaptor2(nullptr)
 	, mBackground(nullptr)
 	, mBackground2(nullptr)
 	, mBackground3(nullptr)
     , mBackgroundIndex(0)
-	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f) //Left, Right, Down, Up
+	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f) 
 	, mSpawnPosition(0.f, 0.f)
-	, mScrollSpeed(-5.0f)//(-1.0f)
+	, mScrollSpeed(-5.0f)
 	, Floorloopcounter(0)
-	, IsRaptorOneLimitX(false)
-	, IsRaptorTwoLimitX(true)
-	, Raptor1_X(0.0)
-	, Raptor2_X(0.0)
 {
 }
 
@@ -68,18 +62,6 @@ void World::buildScene()
 	mPlayerAircraft->setScale(3.0f, 0.0f, 3.0f);
 	mSceneGraph->attachChild(std::move(player));
 
-	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mGame));
-	mRaptor1 = enemy1.get();
-	mRaptor1->setPosition(-0.5, 1.0, 20.0);
-	mRaptor1->setScale(3.0f, 0.0f, 3.0);
-	mRaptor1->setWorldRotation(0, XM_PI, 0);
-
-	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Raptor, mGame));
-	mRaptor2 = enemy2.get();
-	mRaptor2->setPosition(10.0, 1.0, 20.0);
-	mRaptor2->setScale(3.0f, 0.0f, 3.0);
-	mRaptor2->setWorldRotation(0, XM_PI, 0);
-
 	std::unique_ptr<Skybox> skyboxSprite(new Skybox(mGame));
 	mSkybox = skyboxSprite.get();
 	mSkybox->setPosition(0, 0, 0);
@@ -110,11 +92,8 @@ void World::buildScene()
 	mDebugMap = shadowMap.get();
 	mSceneGraph->attachChild(std::move(shadowMap));
 
-
 	mSceneGraph->build();
 }
-
-
 void World::PlayerBorderDistance(const GameTimer& gt)
 {
 	XMFLOAT3 position = mPlayerAircraft->getWorldPosition();
